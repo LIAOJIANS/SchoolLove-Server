@@ -11,26 +11,16 @@ const province = require('../data/provinces')
 // 用户注册路由
 router.post('/register', function (req, res) {
     // 1、获取请求参数
-    const { username, password, type } = req.body
-    if (!username) {
-        res.send({ code: 1, msg: '用户名没有指定！' })
-        return
-    } else if (!password) {
-        res.send({ code: 1, msg: '密码没有指定！' })
-        return
-    } else if (!type) {
-        res.send({ code: 1, msg: '类型没有指定！' })
-        return;
-    }
+    const { username, pwd, sex, birthday, school, grade } = req.body
     // 2、判断是否已经注册过
     UserModel.findOne({ username }, function (err, user) {
         if (user) { // 如果存在
             res.send({ code: 1, msg: '此用户已注册！' }) // 返回信息
         } else { // 不存在
             // 向数据库存储数据
-            new UserModel({ username, type, password: md5(password) }).save(function (err, user) {
+            new UserModel({ username, sex, birthday, grade, school, password: md5(pwd) }).save(function (err, user) {
                 res.cookie('userid', user._id, { maxAge: 1000*60*60*24 }) // 存储一天的cookie信息
-                res.send({ code: 0, data: { username, type, _id: user._id } })
+                res.send({ code: 0, data: { username, _id: user._id } })
             })
         }
     })
@@ -38,8 +28,8 @@ router.post('/register', function (req, res) {
 
 // 用户登录路由
 router.post('/login', function (req, res) {
-    const { username, password } = req.body
-    UserModel.findOne({ username, password: md5(password) }, filter, function (err, user) {
+    const { username, pwd } = req.body
+    UserModel.findOne({ username, password: md5(pwd) }, filter, function (err, user) {
         if (user) {
             res.cookie('userid', user._id, { maxAge: 1000*60*60*24 }) // 存储一天的cookie信息
             res.send({ code: 0, data: user })

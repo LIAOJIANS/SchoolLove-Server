@@ -21,10 +21,10 @@ conn.on('connected', () => {
 const userSchema = mongoose.Schema({
     username: { type: String, require: true }, // 用户名
     password: { type: String, require: true }, // 密码
-    type: { type: String, require: true }, // 用户类型： 男/女
+    sex: { type: String, require: true }, // 用户类型： 男/女
     school: { type: String, require: true }, // 职位
     grade: { type: String, require: true}, // 年级
-    year: { type: String, require: true }, // 公司名称
+    birthday: { type: String, require: true }, // 年
     header: { type: String }, // 头像名称
     info: { type: String } // 个人信息
 })
