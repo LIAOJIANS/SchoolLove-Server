@@ -26,7 +26,8 @@ const userSchema = mongoose.Schema({
     grade: { type: String, require: true}, // 年级
     birthday: { type: String, require: true }, // 年
     header: { type: String }, // 头像名称
-    info: { type: String } // 个人信息
+    info: { type: String }, // 个人信息
+    phone: { type: String } // 电话号码
 })
 
 // 2.2 定义Model

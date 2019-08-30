@@ -12,6 +12,10 @@ const province = require('../data/provinces')
 router.post('/register', function (req, res) {
     // 1、获取请求参数
     const { username, pwd, sex, birthday, school, grade } = req.body
+    if( !sex || !birthday || !school || !grade ) {
+        res.send({ code: 1, msg: '用户信息不完善！' }) // 返回信息
+        return
+    }
     // 2、判断是否已经注册过
     UserModel.findOne({ username }, function (err, user) {
         if (user) { // 如果存在
@@ -20,7 +24,7 @@ router.post('/register', function (req, res) {
             // 向数据库存储数据
             new UserModel({ username, sex, birthday, grade, school, password: md5(pwd) }).save(function (err, user) {
                 res.cookie('userid', user._id, { maxAge: 1000*60*60*24 }) // 存储一天的cookie信息
-                res.send({ code: 0, data: { username, _id: user._id } })
+                res.send({ code: 0, data: { username, _id: user._id, phone: user.phone } })
             })
         }
     })
@@ -39,7 +43,7 @@ router.post('/login', function (req, res) {
     })
 })
 
-// 用户完善信路由
+// 用户完善手机号路由
 router.post('/updata', function (req, res) {
     // 1、获取用户要修改的信息集合
     const user = req.body
